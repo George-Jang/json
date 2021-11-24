@@ -14,6 +14,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -57,10 +60,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initMyAPI(String baseUrl){
 
+        OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
+        builder.addInterceptor(chain -> {
+            Request request = chain.request().newBuilder().addHeader("password","1111").build();
+            return chain.proceed(request);
+        });
+
+        OkHttpClient client = builder.build();
+
+
         Log.d(TAG,"initMyAPI : " + baseUrl);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
+                .client(client)
                 .build();
 
         mMyAPI = retrofit.create(MyAPI.class);
@@ -71,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         if( v == mGetButton){
             Log.d(TAG,"GET");
-            Call<List<PostItem>> getCall = mMyAPI.get_posts();
+            Call<List<PostItem>> getCall = mMyAPI.get_posts(4);
             getCall.enqueue(new Callback<List<PostItem>>() {
                 @Override
                 public void onResponse(Call<List<PostItem>> call, Response<List<PostItem>> response) {

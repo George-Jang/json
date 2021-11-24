@@ -25,7 +25,7 @@ public interface MyAPI{
     Call<PostItem> delete_posts(@Path("pk") int pk);
 
     @GET("/v1/account/{accountId}")
-    Call<List<PostItem>> get_posts();
+    Call<List<PostItem>> get_posts(@Path("accountId") int accountId);
 
    // @GET("/v1/account/{accountId}/")
     //Call<PostItem> get_post_pk(@Path("pk") String );
