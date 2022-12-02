@@ -13,7 +13,7 @@ import retrofit2.http.Path;
 
 public interface MyAPI{
 
-    @Headers("password: 1111")
+    @Headers("password: 111")
 
     @POST("/v1/account")
     Call<PostItem> post_posts(@Body PostItem post);
